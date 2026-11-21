@@ -18,6 +18,10 @@ A Chrome extension (Manifest V3, vanilla JS, no build step) that extracts the re
 
 Click the gear in the popup: auto-save toggle, download sub-folder, and left/right page margin.
 
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).
+
 ## Credits
 
 Uses [Readability.js](https://github.com/mozilla/readability) (Apache-2.0).
