@@ -250,13 +250,40 @@ async function extractArticle() {
     while (lca && !matched.every(p => lca.contains(p))) lca = lca.parentElement;
     if (!lca || lca === document.body || lca === document.documentElement) return null;
 
-    const clone = lca.cloneNode(true);
-    clone.querySelectorAll(JUNK_SELECTOR).forEach(n => n.remove());
+    // Measure a candidate container the way the output will see it: cleaned
+    // of hidden/junk nodes, text length and image count.
+    const measure = el => {
+      const c = el.cloneNode(true);
+      c.querySelectorAll(JUNK_SELECTOR).forEach(n => n.remove());
+      return { clone: c, ratio: norm(c.textContent).length / Math.max(article.length, 1),
+               imgs: c.querySelectorAll('img').length };
+    };
+    const keptImgs = probe.querySelectorAll('img').length;
 
-    const ratio = norm(clone.textContent).length / Math.max(article.length, 1);
-    if (ratio < 1.1 || ratio > 3) return null;   // nothing missing, or too much page
+    // Level 0: the common ancestor itself. If it already holds noticeably more
+    // text than Readability returned, use it (e.g. case study + question +
+    // solution: the question sits between kept paragraphs).
+    let m = measure(lca);
+    if (m.ratio > 3) return null;
+    if (m.ratio >= 1.1) return m.clone.outerHTML;
 
-    return clone.outerHTML;
+    // Otherwise the ancestor holds exactly what Readability kept — but the
+    // missing part may sit NEXT to it, e.g. a quiz page where Readability kept
+    // only the solution <div> and dropped the sibling question block with its
+    // image and A–D options. For short extractions, climb a few levels and
+    // take the first ancestor that adds a real chunk of content (>=30% more
+    // text, or extra images). Long extractions are left alone so ordinary
+    // articles don't swallow comments or related-story blocks.
+    if (article.length > 6000) return null;
+    let node = lca;
+    for (let level = 0; level < 4; level++) {
+      node = node.parentElement;
+      if (!node || node === document.body || node === document.documentElement) return null;
+      m = measure(node);
+      if (m.ratio > 3) return null;                       // too much page
+      if (m.ratio >= 1.3 || m.imgs > keptImgs) return m.clone.outerHTML;
+    }
+    return null;
   }
 
   // --- 7. Clone + Readability ----------------------------------------------
