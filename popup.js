@@ -109,9 +109,11 @@ btn.addEventListener('click', async () => {
     // Step A: inject Readability.js as a content script so it becomes a global
     // inside the page. executeScript with `files` loads the script file from the
     // extension's own directory into the tab's JS context.
+    // extract.js is injected the same way: it defines extractArticle() as a
+    // global inside the page, so nothing in the popup has to load it itself.
     await chrome.scripting.executeScript({
       target : { tabId: tab.id },
-      files  : ['lib/Readability.js'],
+      files  : ['lib/Readability.js', 'extract.js'],
     });
 
     // Step B: inject and run our extraction function.
@@ -128,7 +130,7 @@ btn.addEventListener('click', async () => {
     );
 
     const [{ result: article }] = await Promise.race([
-      chrome.scripting.executeScript({ target: { tabId: tab.id }, func: extractArticle }),
+      chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => extractArticle() }),
       extractionTimeout,
     ]);
 

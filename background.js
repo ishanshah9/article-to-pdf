@@ -7,8 +7,6 @@
 //   • Keep message handlers synchronous-looking: register them at the top level
 //     so Chrome can reattach them after a restart.
 
-importScripts('extract.js');   // defines extractArticle()
-
 chrome.runtime.onInstalled.addListener(() => {
   console.log('[Article to PDF] Extension installed / updated.');
 });
@@ -162,14 +160,14 @@ async function saveTabAsPdf(tab) {
 
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      files:  ['lib/Readability.js'],
+      files:  ['lib/Readability.js', 'extract.js'],
     });
 
     const timeout = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Extraction timed out.')), 30_000));
 
     const [{ result: article }] = await Promise.race([
-      chrome.scripting.executeScript({ target: { tabId: tab.id }, func: extractArticle }),
+      chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => extractArticle() }),
       timeout,
     ]);
     if (!article) throw new Error('Could not extract an article from this page.');
