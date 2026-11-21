@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--
+    reader.css is a web-accessible resource — Chrome loads it from the extension
+    bundle because this page lives at chrome-extension://<id>/reader.html.
+    A relative href works fine here; no special URL needed.
+  -->
+  <link rel="stylesheet" href="reader.css" />
+
+  <!--
+    document.title is set by reader.js once the article is loaded.
+    Chrome uses document.title as the default filename in the "Save as PDF" dialog.
+    Start with a placeholder so there's something visible if JS is slow.
+  -->
+  <title>Loading article…</title>
+</head>
+<body>
+
+  <!--
+    Loading banner — visible by default, hidden by reader.js once all images have
+    loaded and the print dialog is about to open. Hidden in @media print so it
+    never appears in the PDF even if it's still technically in the DOM.
+  -->
+  <div id="loading">
+    <span id="loading-text">Loading images…</span>
+  </div>
+
+  <article id="article">
+
+    <!-- reader.js populates all three sections below -->
+    <h1 id="article-title"></h1>
+
+    <div id="article-meta" class="meta">
+      <!-- byline · site name · source URL · extraction date -->
+    </div>
+
+    <hr class="meta-rule" />
+
+    <!--
+      Shown only when Readability.parse() returned null and we used a fallback
+      selector. Hidden in @media print so it doesn't appear in the PDF.
+    -->
+    <div id="fallback-notice" style="display:none"></div>
+
+    <div id="article-content">
+      <!-- article HTML from Readability goes here -->
+    </div>
+
+  </article>
+
+  <!--
+    Print-again bar — hidden until after window.print() is called. Gives the
+    user a one-click way to re-open the dialog without going back to the popup.
+    Hidden in @media print so it never ends up in the PDF.
+  -->
+  <div id="print-bar" style="display:none">
+    <button id="print-again-btn">Print again / Save as PDF</button>
+  </div>
+
+  <!--
+    reader.js uses chrome.storage.session (an extension API), which is only
+    available to extension pages — not to regular web pages.
+    We load it at the bottom so the DOM is ready when it runs.
+  -->
+  <script src="reader.js"></script>
+</body>
+</html>

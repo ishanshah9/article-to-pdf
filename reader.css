@@ -1,0 +1,396 @@
+/*
+ * reader.css — print-ready article typography
+ *
+ * Goals:
+ *   1. Look good on screen while the user waits for the print dialog.
+ *   2. Produce a clean PDF: sensible margins, readable line length,
+ *      images that don't overflow, headings that don't orphan at page bottom.
+ *
+ * color-scheme: light forces the browser to render white-on-black text even
+ * when the user's OS is in dark mode, so the PDF is always black ink on white.
+ */
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+html {
+  color-scheme: light;          /* prevent OS dark-mode from inverting colours */
+  background: #fff;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 18px;
+  line-height: 1.65;
+  color: #111;
+  background: #fff;
+  text-rendering: optimizeLegibility;  /* better kerning, especially for print */
+
+  max-width: 680px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+/* ── Article title ───────────────────────────────────────────────────────── */
+#article-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+  color: #000;
+}
+
+/* ── Metadata block (byline · site · url · date) ─────────────────────────── */
+#article-meta {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+#article-meta a {
+  color: #666;
+  word-break: break-all;        /* long URLs don't overflow the column */
+}
+
+.meta-rule {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0 28px;
+}
+
+/* ── Embed placeholders (iframes replaced by popup.js) ───────────────────── */
+.embed-placeholder {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: #888;
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 1.2em 0;
+  text-align: center;
+}
+
+.embed-placeholder a {
+  color: #666;
+  word-break: break-all;
+}
+
+/* ── Fallback notice ─────────────────────────────────────────────────────── */
+#fallback-notice {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  color: #999;
+  background: #f9f9f9;
+  border-left: 3px solid #ddd;
+  padding: 6px 10px;
+  margin-bottom: 24px;
+}
+
+/* ── Loading banner ──────────────────────────────────────────────────────── */
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 9px 16px;
+  background: #1a73e8;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  z-index: 9999;
+  letter-spacing: 0.01em;
+}
+
+/* ── Print-again bar ─────────────────────────────────────────────────────── */
+#print-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  z-index: 9999;
+}
+
+#print-again-btn {
+  padding: 8px 24px;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#print-again-btn:hover {
+  background: #1558b0;
+}
+
+/* ── Article body ────────────────────────────────────────────────────────── */
+#article-content {
+  /* Typography that holds up on paper */
+}
+
+#article-content p {
+  margin: 0 0 1.2em 0;
+}
+
+#article-content h1,
+#article-content h2,
+#article-content h3,
+#article-content h4,
+#article-content h5,
+#article-content h6 {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.3;
+  margin: 1.6em 0 0.5em;
+  color: #000;
+}
+
+#article-content h1 { font-size: 1.6rem; }
+#article-content h2 { font-size: 1.35rem; }
+#article-content h3 { font-size: 1.15rem; }
+#article-content h4 { font-size: 1rem; font-weight: 700; }
+
+#article-content a {
+  color: #1a73e8;
+}
+
+#article-content blockquote {
+  margin: 1.5em 0;
+  padding: 0 0 0 20px;
+  border-left: 3px solid #ccc;
+  color: #444;
+  font-style: italic;
+}
+
+#article-content pre,
+#article-content code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.85em;
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+#article-content pre {
+  padding: 12px 16px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+#article-content code {
+  padding: 1px 4px;
+}
+
+#article-content pre code {
+  padding: 0;
+  background: none;
+}
+
+#article-content figure {
+  margin: 1.5em 0;
+}
+
+#article-content figcaption {
+  font-size: 0.8em;
+  color: #666;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ── Images ──────────────────────────────────────────────────────────────── */
+#article-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.2em auto;
+}
+
+/* ── Screen-reader-only text ─────────────────────────────────────────────── */
+/* Sites ship labels like "Question" or "A." as .sr-only spans and hide them
+   with their own CSS, which we don't load. Hide them here too — except the
+   letter label at the start of a list item (quiz options), which we show in
+   place of the list number so options read "A. …" rather than "1. A.…". */
+#article-content .sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#article-content ol:has(> li > .sr-only:first-child) {
+  list-style: none;
+  padding-left: 0;
+}
+
+#article-content li > .sr-only:first-child {
+  position: static;
+  width: auto; height: auto;
+  overflow: visible;
+  clip-path: none;
+  font-weight: 700;
+  margin-right: 0.4em;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────────── */
+#article-content table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+  margin: 1.5em 0;
+}
+
+#article-content th,
+#article-content td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+#article-content th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+/* ── Print rules ─────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    margin: 1.25in 0.5in;     /* top/bottom: 1.25in, left/right: 0.5in (default; reader.js overrides with user setting) */
+    size: letter;
+  }
+
+  body {
+    /* Keep a comfortable line length and some horizontal breathing room.
+       @page gives the physical page margins (1in each side); padding here
+       adds another 0.25in of white space between text and the margin edge. */
+    margin: 0 auto;
+    padding: 0.5in 0.25in;      /* top/bottom: 0.5in, left/right: 0.25in
+                                    This is in-content spacing so it works even
+                                    when Chrome's dialog overrides @page margins. */
+    font-size: 11pt;
+    max-width: 5.5in;           /* ~optimal line length for 11pt serif text */
+    background: #fff;
+    color: #000;
+
+    /* orphans/widows: minimum lines that must remain on the page before/after
+       a page break. Prevents a single dangling line at the top or bottom. */
+    orphans: 3;
+    widows: 3;
+  }
+
+  #article-title {
+    font-size: 20pt;
+  }
+
+  /* Preserve colors and backgrounds exactly as rendered on screen.
+     Chrome strips background-color and non-black text by default when printing
+     (the "Background graphics" dialog toggle does the same thing manually).
+     print-color-adjust: exact turns that stripping off for the whole article,
+     so code block shading, syntax-highlight colours, callout boxes, coloured
+     text, and any other visual styling from the original article all survive
+     into the PDF.
+     -webkit-print-color-adjust is the older prefixed form; both are needed for
+     full Chrome compatibility. print-color-adjust is inherited, so one rule on
+     #article covers every descendant. */
+  #article {
+    /* !important overrides Chrome's dialog-level color-stripping setting,
+       which would otherwise win over a plain stylesheet declaration. */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Re-state code block backgrounds explicitly so they are never ambiguous —
+     if Readability dropped the original site's syntax-highlighter classes,
+     these rules are the only styling a <pre>/<code> block gets. */
+  #article-content pre {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    border-radius: 3px;
+  }
+
+  #article-content code {
+    background: #f5f5f5;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+
+  #article-content pre code {
+    background: none;
+    padding: 0;
+    border: none;
+  }
+
+  /* Headings must not be the last thing on a page */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Keep these elements intact across pages */
+  img, figure, pre, blockquote, table, video, .embed-placeholder {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* In a PDF there's no point showing a clickable URL — print it as text.
+     The source URL is already visible as text in the metadata line. */
+  #article-meta a::after {
+    content: none;
+  }
+
+  /* Links: keep any colour the article set via inline style, but strip the
+     underline decoration which looks noisy in print. We do NOT force links
+     to black here any more — if an article has coloured text or highlighted
+     passages, print-color-adjust: exact above will preserve them. */
+  #article-content a {
+    text-decoration: none;
+  }
+
+  /* Print the href after inline links so they're still useful — but ONLY for
+     links where the visible text is NOT the URL already. This avoids the common
+     case of reference-style or nav links cluttering every paragraph.
+     We check: if link text differs from href, append the href.
+     CSS can't compare text vs href directly, so we use a looser heuristic:
+     skip links whose href starts with "#" (anchors) or contains "img" (image links),
+     and skip links that wrap images. For body text, most meaningful links will
+     still get their URL printed. If your PDFs look too noisy, comment this out. */
+  #article-content a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #444;
+    word-break: break-all;
+  }
+
+  /* Suppress URL expansion for anchor-only and image-wrapping links */
+  #article-content a[href^="#"]::after,
+  #article-content a:has(img)::after {
+    content: none;
+  }
+
+  /* Hide screen-only chrome — none of these should appear in the PDF.
+     !important is required here: reader.js sets display:block on #print-bar
+     as an inline style, and inline styles beat @media print rules unless
+     overridden with !important. */
+  #loading,
+  #print-bar,
+  #fallback-notice {
+    display: none !important;
+  }
+}
