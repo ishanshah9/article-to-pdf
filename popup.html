@@ -160,6 +160,29 @@
       margin-top: 5px;
     }
 
+    .shortcut-row { display: flex; align-items: center; gap: 8px; }
+    #shortcut-current {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #f8f9fa;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    #shortcut-change-btn {
+      padding: 6px 10px;
+      border: 1px solid #1a73e8;
+      border-radius: 5px;
+      background: #fff;
+      color: #1a73e8;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    #shortcut-change-btn:hover { background: #e8f0fe; }
+    #last-run { margin-top: 8px; font-size: 11px; color: #888; text-align: center; }
+    #last-run.error { color: #c5221f; }
+
     #settings-save-btn {
       width: 100%;
       padding: 9px 0;
@@ -196,6 +219,7 @@
     <button id="save-btn">Save as PDF</button>
     <div id="autosave-badge">Auto-save on — no dialog will open</div>
     <div id="status"></div>
+    <div id="last-run"></div>
   </div>
 
   <!-- ── Settings view ──────────────────────────────────────── -->
@@ -228,6 +252,20 @@
       <select id="margin-lr">
         <!-- options injected by popup.js -->
       </select>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div class="field-label">Keyboard shortcut</div>
+      <div class="shortcut-row">
+        <span id="shortcut-current">…</span>
+        <button id="shortcut-change-btn" type="button">Change…</button>
+      </div>
+      <div class="folder-hint">
+        Chrome manages shortcut keys. "Change…" opens
+        <strong>chrome://extensions/shortcuts</strong> — edit
+        "Article to PDF" there. With auto-save off the shortcut opens the
+        print dialog; turn auto-save on for a fully hands-free save.
+      </div>
     </div>
 
     <button id="settings-save-btn">Save Settings</button>

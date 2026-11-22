@@ -139,6 +139,7 @@ async function handleReaderReady(tabId, { title, folder, marginLR }) {
 //   "…" working · "OK" done · "!" can't run on this page · "ERR" failed
 chrome.commands.onCommand.addListener(command => {
   if (command !== 'save-pdf') return;
+  console.log('[Article to PDF] Shortcut pressed.');
   chrome.tabs.query({ active: true, currentWindow: true })
     .then(([tab]) => saveTabAsPdf(tab));
 });
@@ -149,9 +150,16 @@ async function setBadge(text, color, clearAfterMs) {
   if (clearAfterMs) setTimeout(() => chrome.action.setBadgeText({ text: '' }), clearAfterMs);
 }
 
+// Remember how the last shortcut run went so the popup can show it — with no
+// popup open there is otherwise no way to see why a run failed.
+function recordRun(ok, message) {
+  return chrome.storage.local.set({ lastShortcutRun: { ok, message, time: Date.now() } });
+}
+
 async function saveTabAsPdf(tab) {
   // executeScript only works on http/https pages.
   if (!tab?.id || !tab.url?.startsWith('http')) {
+    await recordRun(false, 'Only works on regular web pages (http/https).');
     return setBadge('!', '#c5221f', 3000);
   }
 
@@ -176,9 +184,11 @@ async function saveTabAsPdf(tab) {
       await chrome.storage.sync.get(['autoSave', 'saveFolder', 'marginLR']);
 
     await handleSaveAsPdf({ article, autoSave, saveFolder, marginLR: parseFloat(marginLR) });
+    await recordRun(true, autoSave ? `saved to Downloads/${saveFolder}/` : 'reader tab opened (print dialog).');
     await setBadge('OK', '#1e8e3e', 3000);
   } catch (err) {
     console.error('[Article to PDF] Shortcut save failed:', err);
+    await recordRun(false, err.message || String(err));
     await setBadge('ERR', '#c5221f', 5000);
   }
 }

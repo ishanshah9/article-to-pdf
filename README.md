@@ -16,7 +16,7 @@ A Chrome extension (Manifest V3, vanilla JS, no build step) that extracts the re
 
 ## Keyboard shortcut
 
-Press **Cmd+Shift+P** (Mac) or **Ctrl+Shift+P** (Windows/Linux) to save the current page without opening the popup. The toolbar icon shows `…` while working, then `OK` (or `ERR` / `!`). Change the key at `chrome://extensions/shortcuts`.
+Press **Option+Shift+S** (Mac) or **Alt+Shift+S** (Windows/Linux) to save the current page without opening the popup. The toolbar icon shows `…` while working, then `OK` (or `ERR` / `!`). Chrome only lets *you* assign extension shortcuts: open Settings (⚙) in the popup and click **Change…**, or go to `chrome://extensions/shortcuts`. With auto-save off the shortcut opens the print dialog; turn auto-save on for a fully hands-free save.
 
 ## Settings
 

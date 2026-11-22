@@ -50,6 +50,37 @@ async function loadSettings() {
 
 loadSettings();
 
+// ---------------------------------------------------------------------------
+// Keyboard shortcut — show the current binding + a way to change it
+// ---------------------------------------------------------------------------
+// Extensions can't set their own shortcut keys; Chrome only lets the user do
+// that on chrome://extensions/shortcuts. We read the live binding with
+// chrome.commands.getAll() and link to that page.
+const shortcutCurrent   = document.getElementById('shortcut-current');
+const shortcutChangeBtn = document.getElementById('shortcut-change-btn');
+const lastRunEl         = document.getElementById('last-run');
+
+async function loadShortcut() {
+  const commands = await chrome.commands.getAll();
+  const cmd = commands.find(c => c.name === 'save-pdf');
+  shortcutCurrent.textContent = cmd?.shortcut || 'Not set — click Change…';
+}
+loadShortcut();
+
+shortcutChangeBtn.addEventListener('click', () => {
+  chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+});
+
+// What happened the last time the shortcut ran (written by background.js).
+async function loadLastRun() {
+  const { lastShortcutRun } = await chrome.storage.local.get('lastShortcutRun');
+  if (!lastShortcutRun) return;
+  const when = new Date(lastShortcutRun.time).toLocaleTimeString();
+  lastRunEl.textContent = `Last shortcut run ${when}: ${lastShortcutRun.message}`;
+  lastRunEl.className   = lastShortcutRun.ok ? '' : 'error';
+}
+loadLastRun();
+
 settingsBtn.addEventListener('click', () => {
   mainView.style.display     = 'none';
   settingsView.style.display = 'block';

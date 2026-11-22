@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Article to PDF",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Extract the readable article from any webpage and save it as a clean PDF.",
 
   "permissions": [
@@ -20,8 +20,8 @@
   "commands": {
     "save-pdf": {
       "suggested_key": {
-        "default": "Ctrl+Shift+P",
-        "mac": "Command+Shift+P"
+        "default": "Alt+Shift+S",
+        "mac": "Alt+Shift+S"
       },
       "description": "Save the current page as a PDF"
     }
