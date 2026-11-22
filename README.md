@@ -14,6 +14,10 @@ A Chrome extension (Manifest V3, vanilla JS, no build step) that extracts the re
 2. Click **Load unpacked** and select this folder.
 3. Open an article, click the extension icon, then **Save as PDF**.
 
+## Keyboard shortcut
+
+Press **Option+Shift+S** (Mac) or **Alt+Shift+S** (Windows/Linux) to save the current page without opening the popup. The toolbar icon shows `…` while working, then `OK` (or `ERR` / `!`). Chrome only lets *you* assign extension shortcuts: open Settings (⚙) in the popup and click **Change…**, or go to `chrome://extensions/shortcuts`. With auto-save off the shortcut opens the print dialog; turn auto-save on for a fully hands-free save.
+
 ## Settings
 
 Click the gear in the popup: auto-save toggle, download sub-folder, and left/right page margin.
